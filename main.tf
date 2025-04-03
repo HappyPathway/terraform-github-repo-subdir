@@ -101,7 +101,7 @@ resource "github_release" "initial_release" {
   
   # Ensure this runs after the repository setup
   depends_on = [
-    null_resource.repo_setup
+    module.repo
   ]
   
   # Only create if the repo setup was successful
@@ -113,5 +113,5 @@ resource "github_release" "initial_release" {
   prerelease  = false
   
   # Point the release to the default branch
-  target_commitish = null_resource.repo_setup.triggers.default_branch
+  target_commitish = module.repo.github_repo.default_branch
 }
