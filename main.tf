@@ -1,5 +1,3 @@
-provider "github" {}
-
 data "github_repository" "repo_src" {
   full_name = var.repo_src
 }
