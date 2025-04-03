@@ -179,13 +179,22 @@ def setup_repository(query):
             "success": "false",
             "error": f"Failed to create branch: {default_branch}"
         }
-    
+
+    # Attempt to pull remote changes before pushing
+    print("Pulling remote changes to avoid conflicts...", file=sys.stderr)
+    if not run_command(f"git pull origin {default_branch} --rebase", cwd=repo_dir):
+        return {
+            "success": "false",
+            "error": f"Failed to pull remote changes for branch: {default_branch}"
+        }
+
+    # Push changes to the remote repository
     if not run_command(f"git push -u origin {default_branch}", cwd=repo_dir):
         return {
             "success": "false",
             "error": f"Failed to push to remote branch: {default_branch}"
         }
-    
+
     print("Repository setup completed successfully!", file=sys.stderr)
     return {
         "success": "true",
