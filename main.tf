@@ -77,23 +77,22 @@ module "repo" {
   deploy_keys                           = var.deploy_keys
 }
 
-data "external" "repo_setup" {
-  program = ["python3", "${path.module}/templates/git_setup.py"]
-
-  query = {
+resource "local_file" "script_params" {
+  content = jsonencode({
     repo_dir = var.repo_dir
-    # Use specific source repository URL type based on use_ssh_source
     src_clone_url = var.use_ssh_source ? data.github_repository.repo_src.ssh_clone_url : data.github_repository.repo_src.http_clone_url
-    # Use specific destination repository URL type based on use_ssh_destination
     dest_clone_url = var.use_ssh_destination ? module.repo.github_repo.ssh_clone_url : module.repo.github_repo.http_clone_url
     repo_branch = var.repo_branch
     sub_dir = var.sub_dir
     default_branch = var.github_default_branch != null ? var.github_default_branch : "main"
     use_ssh_source = var.use_ssh_source ? "true" : "false"
     use_ssh_destination = var.use_ssh_destination ? "true" : "false"
+  })
+  filename = "${path.module}/${var.repo_dir}_params.json"
+  # Execute the Python script to set up the repository
+  provisioner "local-exec" {
+    command = "python3 ${path.module}/templates/git_setup.py --params-file ${self.filename}"
   }
-
-  # Ensure this runs after the GitHub repository is created
   depends_on = [module.repo]
 }
 
@@ -102,7 +101,7 @@ resource "github_release" "initial_release" {
   
   # Ensure this runs after the repository setup
   depends_on = [
-    data.external.repo_setup
+    module.repo
   ]
   
   # Only create if the repo setup was successful
@@ -114,5 +113,5 @@ resource "github_release" "initial_release" {
   prerelease  = false
   
   # Point the release to the default branch
-  target_commitish = data.external.repo_setup.result.default_branch
+  target_commitish = module.repo.github_repo.default_branch
 }
