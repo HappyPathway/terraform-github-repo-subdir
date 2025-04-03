@@ -13,9 +13,9 @@ output "repo_name" {
 output "repo_setup_result" {
   value = {
     success = data.external.repo_setup.result.success
-    message = try(data.external.repo_setup.result.message, null)
-    repo_dir = try(data.external.repo_setup.result.repo_dir, null)
-    default_branch = try(data.external.repo_setup.result.default_branch, null)
+    message = data.external.repo_setup.result.message
+    repo_dir = data.external.repo_setup.result.repo_dir
+    default_branch = data.external.repo_setup.result.default_branch
   }
   description = "Result of the repository setup operation"
 }
