@@ -4,6 +4,7 @@
 provider "registry.terraform.io/hashicorp/external" {
   version = "2.3.4"
   hashes = [
+    "h1:U6W8rgrdmR2pZ2cicFoGOSQ4GXuIf/4EK7s0vTJN7is=",
     "h1:XWkRZOLKMjci9/JAtE8X8fWOt7A4u+9mgXSUjc4Wuyo=",
     "zh:037fd82cd86227359bc010672cd174235e2d337601d4686f526d0f53c87447cb",
     "zh:0ea1db63d6173d01f2fa8eb8989f0809a55135a0d8d424b08ba5dabad73095fa",

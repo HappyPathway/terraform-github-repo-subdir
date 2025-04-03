@@ -1,13 +1,13 @@
 output "ssh_clone_url" {
-  value = module.repo.github_repository.ssh_clone_url
+  value = module.repo.github_repo.ssh_clone_url
 }
 
 output "http_clone_url" {
-  value = module.repo.github_repository.http_clone_url
+  value = module.repo.github_repos.http_clone_url
 }
 
 output "repo_name" {
-  value = module.repo.github_repository.full_name
+  value = module.repo.github_repo.full_name
 }
 
 output "repo_setup_result" {

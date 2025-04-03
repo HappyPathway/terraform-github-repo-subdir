@@ -87,7 +87,7 @@ data "external" "repo_setup" {
     # Use specific source repository URL type based on use_ssh_source
     src_clone_url = var.use_ssh_source ? data.github_repository.repo_src.ssh_clone_url : data.github_repository.repo_src.http_clone_url
     # Use specific destination repository URL type based on use_ssh_destination
-    dest_clone_url = var.use_ssh_destination ? module.repo.github_repository.ssh_clone_url : module.repo.github_repository.http_clone_url
+    dest_clone_url = var.use_ssh_destination ? module.repo.github_repo.ssh_clone_url : module.repo.github_repo.http_clone_url
     repo_branch = var.repo_branch
     sub_dir = var.sub_dir
     default_branch = var.github_default_branch != null ? var.github_default_branch : "main"
