@@ -104,3 +104,6 @@ See the [examples directory](./examples) for complete examples:
 ## License
 
 This project is licensed under the terms of the MIT license.
+
+[![Terraform Validation](https://github.com/HappyPathway/terraform-github-repo-subdir/actions/workflows/terraform.yaml/badge.svg)](https://github.com/HappyPathway/terraform-github-repo-subdir/actions/workflows/terraform.yaml)
+
