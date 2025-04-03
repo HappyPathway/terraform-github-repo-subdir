@@ -468,3 +468,15 @@ variable "use_ssh" {
   description = "Whether to use SSH URLs for Git operations (true) or HTTPS URLs (false)"
   default     = true
 }
+
+variable "use_ssh_source" {
+  type        = bool
+  description = "Whether to use SSH URLs for source repository Git operations (true) or HTTPS URLs (false)"
+  default     = true
+}
+
+variable "use_ssh_destination" {
+  type        = bool
+  description = "Whether to use SSH URLs for destination repository Git operations (true) or HTTPS URLs (false)"
+  default     = true
+}

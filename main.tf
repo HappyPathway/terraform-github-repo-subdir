@@ -84,12 +84,15 @@ data "external" "repo_setup" {
 
   query = {
     repo_dir = var.repo_dir
-    src_clone_url = var.use_ssh ? data.github_repository.repo_src.ssh_clone_url : data.github_repository.repo_src.http_clone_url
-    ssh_clone_url = var.use_ssh ? module.repo.github_repository.ssh_clone_url : module.repo.github_repository.http_clone_url
+    # Use specific source repository URL type based on use_ssh_source
+    src_clone_url = var.use_ssh_source ? data.github_repository.repo_src.ssh_clone_url : data.github_repository.repo_src.http_clone_url
+    # Use specific destination repository URL type based on use_ssh_destination
+    dest_clone_url = var.use_ssh_destination ? module.repo.github_repository.ssh_clone_url : module.repo.github_repository.http_clone_url
     repo_branch = var.repo_branch
     sub_dir = var.sub_dir
     default_branch = var.github_default_branch != null ? var.github_default_branch : "main"
-    use_ssh = var.use_ssh ? "true" : "false"
+    use_ssh_source = var.use_ssh_source ? "true" : "false"
+    use_ssh_destination = var.use_ssh_destination ? "true" : "false"
   }
 
   # Ensure this runs after the GitHub repository is created

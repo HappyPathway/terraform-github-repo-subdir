@@ -39,14 +39,15 @@ def setup_repository(query):
     """Set up a GitHub repository from parameters in the query."""
     repo_dir = query.get('repo_dir')
     src_clone_url = query.get('src_clone_url')
-    clone_url = query.get('ssh_clone_url')  # We'll keep the parameter name 'ssh_clone_url' for backward compatibility
+    dest_clone_url = query.get('dest_clone_url')  # New parameter name for destination URL
     repo_branch = query.get('repo_branch')
     sub_dir = query.get('sub_dir', 'false')
     default_branch = query.get('default_branch', 'main')
-    use_ssh = query.get('use_ssh', 'true').lower() == 'true'
+    use_ssh_source = query.get('use_ssh_source', 'true').lower() == 'true'
+    use_ssh_destination = query.get('use_ssh_destination', 'true').lower() == 'true'
     
     # Validate required variables
-    required_vars = ['repo_dir', 'src_clone_url', 'ssh_clone_url', 'repo_branch']
+    required_vars = ['repo_dir', 'src_clone_url', 'dest_clone_url', 'repo_branch']
     missing_vars = [var for var in required_vars if not query.get(var)]
     
     if missing_vars:
@@ -57,9 +58,11 @@ def setup_repository(query):
             "error": error_msg
         }
     
-    # Log which protocol is being used
-    protocol = "SSH" if use_ssh else "HTTPS"
-    print(f"Using {protocol} protocol for Git operations", file=sys.stderr)
+    # Log which protocol is being used for each repository
+    src_protocol = "SSH" if use_ssh_source else "HTTPS"
+    dest_protocol = "SSH" if use_ssh_destination else "HTTPS"
+    print(f"Using {src_protocol} protocol for source repository", file=sys.stderr)
+    print(f"Using {dest_protocol} protocol for destination repository", file=sys.stderr)
     
     # Clean up existing directory if it exists
     if os.path.exists(repo_dir):
@@ -146,8 +149,8 @@ def setup_repository(query):
         }
     
     # Configure remote
-    print(f"Configuring remote origin to {clone_url}...", file=sys.stderr)
-    if not run_command(f"git remote add origin {clone_url}", cwd=repo_dir):
+    print(f"Configuring remote origin to {dest_clone_url}...", file=sys.stderr)
+    if not run_command(f"git remote add origin {dest_clone_url}", cwd=repo_dir):
         return {
             "success": False,
             "error": "Failed to add remote"
