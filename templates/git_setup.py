@@ -54,7 +54,7 @@ def setup_repository(query):
         error_msg = f"Missing required parameters: {', '.join(missing_vars)}"
         print(error_msg, file=sys.stderr)
         return {
-            "success": False,
+            "success": "false",
             "error": error_msg
         }
     
@@ -73,7 +73,7 @@ def setup_repository(query):
     print(f"Cloning source repository from {src_clone_url}...", file=sys.stderr)
     if not run_command(f"git clone {src_clone_url} {repo_dir}"):
         return {
-            "success": False,
+            "success": "false",
             "error": "Failed to clone source repository"
         }
     
@@ -81,7 +81,7 @@ def setup_repository(query):
     print(f"Checking out branch {repo_branch}...", file=sys.stderr)
     if not run_command(f"git checkout {repo_branch}", cwd=repo_dir):
         return {
-            "success": False,
+            "success": "false",
             "error": f"Failed to checkout branch: {repo_branch}"
         }
     
@@ -125,7 +125,7 @@ def setup_repository(query):
             shutil.rmtree(temp_dir)
         except Exception as e:
             return {
-                "success": False,
+                "success": "false",
                 "error": f"Failed to process subdirectory: {str(e)}"
             }
     
@@ -138,13 +138,13 @@ def setup_repository(query):
     print("Initializing new Git repository...", file=sys.stderr)
     if not run_command("git init", cwd=repo_dir):
         return {
-            "success": False,
+            "success": "false",
             "error": "Failed to initialize new repository"
         }
     
     if not run_command("git config core.autocrlf false", cwd=repo_dir):
         return {
-            "success": False,
+            "success": "false",
             "error": "Failed to configure Git"
         }
     
@@ -152,14 +152,14 @@ def setup_repository(query):
     print(f"Configuring remote origin to {dest_clone_url}...", file=sys.stderr)
     if not run_command(f"git remote add origin {dest_clone_url}", cwd=repo_dir):
         return {
-            "success": False,
+            "success": "false",
             "error": "Failed to add remote"
         }
     
     # Add all files
     if not run_command("git add .", cwd=repo_dir):
         return {
-            "success": False,
+            "success": "false",
             "error": "Failed to add files to Git"
         }
     
@@ -167,7 +167,7 @@ def setup_repository(query):
     print("Committing files...", file=sys.stderr)
     if not run_command('git commit -m "Initial commit from source repository"', cwd=repo_dir):
         return {
-            "success": False,
+            "success": "false",
             "error": "Failed to commit files"
         }
     
@@ -175,19 +175,19 @@ def setup_repository(query):
     print(f"Pushing to default branch: {default_branch}...", file=sys.stderr)
     if not run_command(f"git branch -M {default_branch}", cwd=repo_dir):
         return {
-            "success": False,
+            "success": "false",
             "error": f"Failed to create branch: {default_branch}"
         }
     
     if not run_command(f"git push -u origin {default_branch}", cwd=repo_dir):
         return {
-            "success": False,
+            "success": "false",
             "error": f"Failed to push to remote branch: {default_branch}"
         }
     
     print("Repository setup completed successfully!", file=sys.stderr)
     return {
-        "success": True,
+        "success": "true",
         "repo_dir": repo_dir,
         "default_branch": default_branch,
         "message": "Repository setup completed successfully!"
@@ -199,7 +199,7 @@ def main():
         input_data = json.load(sys.stdin)
     except json.JSONDecodeError:
         sys.stderr.write("Error: Invalid JSON input\n")
-        json.dump({"success": False, "error": "Invalid JSON input"}, sys.stdout)
+        json.dump({"success": "false", "error": "Invalid JSON input"}, sys.stdout)
         sys.exit(1)
     
     # Process the repository setup
