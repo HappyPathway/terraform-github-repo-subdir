@@ -12,10 +12,8 @@ output "repo_name" {
 
 output "repo_setup_result" {
   value = {
-    success = data.external.repo_setup.result.success
-    message = data.external.repo_setup.result.message
-    repo_dir = data.external.repo_setup.result.repo_dir
-    default_branch = data.external.repo_setup.result.default_branch
+    repo_dir = null_resource.repo_setup.triggers.repo_dir
+    default_branch = null_resource.repo_setup.triggers.default_branch
   }
-  description = "Result of the repository setup operation"
+  description = "Information about the repository setup operation"
 }
